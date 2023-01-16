@@ -38,7 +38,7 @@ def register():
         # add user to DB
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('secrets'))
+        return redirect(url_for('secrets', user=new_user))
     return render_template("register.html")
 
 @app.route('/login')
