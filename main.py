@@ -37,6 +37,12 @@ def home():
 @app.route('/register',methods=['GET','POST'])
 def register():
     if request.method == 'POST':
+
+        # check if email already exists in DB
+        if User.query.filter_by(email=request.form['email']).first():
+            flash(f'User with email: {request.form["email"]}, already exits, Try logging in')
+            return redirect(url_for('login'))
+
         # register new user
         new_user = User(
             email = request.form['email'],
