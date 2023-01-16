@@ -62,9 +62,16 @@ def login():
 
         # find user using the entered email
         user = User.query.filter_by(email=email).first()
-
+        # if no user has such mentioned email
+        if not user:
+            flash('Email does not exist, try again')
+            return redirect(url_for('login'))
         # check hashed password against plain-text unhashed password
-        if check_password_hash(user.password, password):
+        elif not check_password_hash(user.password, password):
+            flash('Incorrect password, try again')
+            return redirect(url_for('login'))
+        # if both email and password match to a user
+        else:
             login_user(user)
             return redirect(url_for('secrets'))
     return render_template("login.html")
