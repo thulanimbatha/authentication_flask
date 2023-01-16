@@ -25,10 +25,20 @@ def home():
     return render_template("index.html")
 
 
-@app.route('/register',methods=['POST'])
+@app.route('/register',methods=['GET','POST'])
 def register():
+    if request.method == 'POST':
+        # register new user
+        new_user = User(
+            email = request.form['email'],
+            name = request.form['name'],
+            password = request.form['password']
+        )
+        # add user to DB
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('secrets'))
     return render_template("register.html")
-
 
 @app.route('/login')
 def login():
@@ -45,9 +55,10 @@ def logout():
     pass
 
 
+# download file
 @app.route('/download')
 def download():
-    pass
+    return send_from_directory('static', path='files/cheat_sheet.pdf')
 
 
 if __name__ == "__main__":
